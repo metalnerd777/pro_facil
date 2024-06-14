@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
@@ -24,6 +17,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import Mapbox from '@rnmapbox/maps';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -56,6 +51,10 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
+  Mapbox.setAccessToken(
+    'sk.eyJ1IjoianVhbnBhcnJhMTk4OCIsImEiOiJjbHhlNWlkcTMwZHEyMmxwc3NjbTltejdnIn0.Q6SBdS7sk58pCgKPgii_Qg',
+  );
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -71,26 +70,19 @@ function App(): React.JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
+        {/* <Header /> */}
+        <Text>INICIO</Text>
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <View style={styles.page}>
+            <View style={styles.container}>
+              <Mapbox.MapView style={styles.map} />
+            </View>
+          </View>
         </View>
+        <Text>FIN</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -112,6 +104,18 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  page: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    height: 900,
+    width: '100%',
+  },
+  map: {
+    flex: 1,
   },
 });
 
