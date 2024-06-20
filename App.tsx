@@ -52,7 +52,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 
 function App(): React.JSX.Element {
   Mapbox.setAccessToken(
-    'sk.eyJ1IjoianVhbnBhcnJhMTk4OCIsImEiOiJjbHhlNWlkcTMwZHEyMmxwc3NjbTltejdnIn0.Q6SBdS7sk58pCgKPgii_Qg',
+    'sk.eyJ1IjoianVhbnBhcnJhMTk4OCIsImEiOiJjbHhtaTE0OWgwN3NwMmtva2RyaGpjNzNzIn0.WryVFThrWJWoq3Or6Z-pJA',
   );
 
   const isDarkMode = useColorScheme() === 'dark';
