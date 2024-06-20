@@ -13,8 +13,12 @@ export default function Map() {
     <MapView
       style={{flex: 1}}
       styleURL="mapbox://styles/mapbox/navigation-night-v1">
-      <Camera followUserLocation />
-      <LocationPuck />
+      <Camera followUserLocation followZoomLevel={16} />
+      <LocationPuck
+        puckBearingEnabled={true}
+        puckBearing="heading"
+        pulsing={{isEnabled: true}}
+      />
     </MapView>
   );
 }
