@@ -3,13 +3,17 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Alert,
   TouchableOpacity,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {fas} from '@fortawesome/free-solid-svg-icons';
+import {fab} from '@fortawesome/free-brands-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+library.add(fas, fab);
 
 const RegisterScreen: React.FC = () => {
   const [name, setName] = useState('');
@@ -37,50 +41,104 @@ const RegisterScreen: React.FC = () => {
         Ingrese los siguientes datos para su registro
       </Text>
       <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre(s)"
-          value={name}
-          onChangeText={setName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Apellido(s)"
-          value={lastName}
-          onChangeText={setLastName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Teléfono"
-          value={phone}
-          onChangeText={setPhone}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          value={password}
-          onChangeText={setPassword}
-        />
+        <View style={styles.ticontainer}>
+          <FontAwesomeIcon
+            style={styles.icon}
+            icon={['fas', 'user']}
+            size={30}
+            color="#515151"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre(s)"
+            value={name}
+            onChangeText={setName}
+          />
+        </View>
+
+        <View style={styles.ticontainer}>
+          <FontAwesomeIcon
+            style={styles.icon}
+            icon={['fas', 'user']}
+            size={30}
+            color="#515151"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Apellido(s)"
+            value={lastName}
+            onChangeText={setLastName}
+          />
+        </View>
+        <View style={styles.ticontainer}>
+          <FontAwesomeIcon
+            style={styles.icon}
+            icon={['fas', 'phone']}
+            size={30}
+            color="#515151"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Teléfono"
+            value={phone}
+            onChangeText={setPhone}
+          />
+        </View>
+        <View style={styles.ticontainer}>
+          <FontAwesomeIcon
+            style={styles.icon}
+            icon={['fas', 'envelope']}
+            size={30}
+            color="#515151"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+        <View style={styles.ticontainer}>
+          <FontAwesomeIcon
+            style={styles.icon}
+            icon={['fas', 'lock']}
+            size={30}
+            color="#515151"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            value={password}
+            onChangeText={setPassword}
+          />
+        </View>
         <LinearGradient
           colors={['#ff0000', '#9f00b4']}
           start={{x: 0, y: 1}}
           end={{x: 1, y: 0}}
           style={styles.button}>
+          <FontAwesomeIcon
+            style={styles.buttonicon}
+            icon={['fas', 'right-to-bracket']}
+            size={25}
+            color="#fff"
+          />
           <TouchableOpacity onPress={handleLogin}>
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
         </LinearGradient>
+
         <LinearGradient
           colors={['#ff0000', '#9f00b4']}
           start={{x: 0, y: 1}}
           end={{x: 1, y: 0}}
           style={styles.button}>
+          <FontAwesomeIcon
+            style={styles.buttonicon}
+            icon={['fab', 'google']}
+            size={25}
+            color="#fff"
+          />
           <TouchableOpacity onPress={handleLogin}>
             <Text style={styles.buttonText}>Ingresar con Google</Text>
           </TouchableOpacity>
@@ -95,6 +153,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     backgroundColor: '#f3f3f3',
+  },
+  ticontainer: {
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 50,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    height: 50,
+    backgroundColor: '#fff',
   },
   title: {
     marginStart: 30,
@@ -114,12 +184,12 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 20,
-    paddingLeft: 20,
+    paddingLeft: 15,
+    paddingTop: 22,
     borderColor: 'grey',
     borderWidth: 0,
     borderBottomColor: 'black',
     borderRadius: 25,
-    backgroundColor: '#fff',
     marginBottom: 15,
     width: 350,
     height: 60,
@@ -129,6 +199,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
+    display: 'flex',
+    flexDirection: 'row',
     marginTop: 10,
     paddingTop: 10,
     paddingLeft: 50,
@@ -145,6 +217,13 @@ const styles = StyleSheet.create({
   },
   register: {
     marginTop: 20,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  buttonicon: {
+    marginRight: 10,
+    marginTop: 2,
   },
 });
 export default RegisterScreen;
