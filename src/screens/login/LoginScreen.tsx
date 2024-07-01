@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
+
 import {
   View,
   Text,
   TextInput,
-  Button,
+  AppState,
   StyleSheet,
   Alert,
   TouchableOpacity,
 } from 'react-native';
+import supabase from '../../lib/supabase';
+
 import LinearGradient from 'react-native-linear-gradient';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {fas} from '@fortawesome/free-solid-svg-icons';
@@ -15,17 +18,36 @@ import {fab} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 library.add(fas, fab);
 
+AppState.addEventListener('change', state => {
+  if (state === 'active') {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
+
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (email === '1' && password === '1') {
-      Alert.alert('Login Successful');
-    } else {
-      Alert.alert('Datos Incorrectos');
-    }
-  };
+  async function signInWithEmail() {
+    setLoading(true);
+    const {error} = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    if (error) Alert.alert(error.message);
+    setLoading(false);
+  }
+
+  // const handleLogin = () => {
+  //   if (email === '1' && password === '1') {
+  //     Alert.alert('Login Successful');
+  //   } else {
+  //     Alert.alert('Datos Incorrectos');
+  //   }
+  // };
 
   return (
     <LinearGradient
@@ -80,7 +102,9 @@ const LoginScreen: React.FC = () => {
             size={25}
             color="#fff"
           />
-          <TouchableOpacity onPress={handleLogin}>
+          <TouchableOpacity
+            disabled={loading}
+            onPress={() => signInWithEmail()}>
             <Text style={styles.buttonText}>Ingresar</Text>
           </TouchableOpacity>
         </LinearGradient>
@@ -95,7 +119,7 @@ const LoginScreen: React.FC = () => {
             size={25}
             color="#fff"
           />
-          <TouchableOpacity onPress={handleLogin}>
+          <TouchableOpacity onPress={() => signInWithEmail()}>
             <Text style={styles.buttonText}>Ingresar con Google</Text>
           </TouchableOpacity>
         </LinearGradient>
