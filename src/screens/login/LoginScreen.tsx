@@ -8,6 +8,8 @@ import {
   StyleSheet,
   Alert,
   TouchableOpacity,
+  Image,
+  ImageBackground,
 } from 'react-native';
 import supabase from '../../lib/supabase';
 
@@ -40,22 +42,16 @@ const LoginScreen: React.FC = () => {
     if (error) Alert.alert(error.message);
     setLoading(false);
   }
-
-  // const handleLogin = () => {
-  //   if (email === '1' && password === '1') {
-  //     Alert.alert('Login Successful');
-  //   } else {
-  //     Alert.alert('Datos Incorrectos');
-  //   }
-  // };
-
   return (
-    <LinearGradient
-      style={styles.container}
-      colors={['#7b1fa2', '#64ffda']}
-      start={{x: 0, y: 1}}
-      end={{x: 1, y: 0}}>
-      <Text style={styles.title}>PROFÁCIL</Text>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require('../../assets/top-back.png')}
+        style={styles.header}
+      />
+      <Image
+        source={require('../../assets/logos/logo-pink.png')}
+        style={styles.title}
+      />
       <Text style={styles.subtitle}>
         Bienvenido a la App que te ayuda a encontrar el servicio que necesites
       </Text>
@@ -92,7 +88,7 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.recover}>¿Olidaste tu contraseña?</Text>
 
         <LinearGradient
-          colors={['#ff0000', '#9f00b4']}
+          colors={['#ff004f', '#9f00b4']}
           start={{x: 0, y: 1}}
           end={{x: 1, y: 0}}
           style={styles.button}>
@@ -109,7 +105,7 @@ const LoginScreen: React.FC = () => {
           </TouchableOpacity>
         </LinearGradient>
         <LinearGradient
-          colors={['#ff0000', '#9f00b4']}
+          colors={['#ff004f', '#9f00b4']}
           start={{x: 0, y: 1}}
           end={{x: 1, y: 0}}
           style={styles.button}>
@@ -125,35 +121,40 @@ const LoginScreen: React.FC = () => {
         </LinearGradient>
         <Text style={styles.register}>¿No tienes cuenta? Registrate aquí</Text>
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 300,
     justifyContent: 'center',
     flex: 1,
     backgroundColor: '#f3f3f3',
   },
   ticontainer: {
-    marginBottom: 20,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 50,
     paddingHorizontal: 10,
-    paddingVertical: 5,
-    height: 50,
     backgroundColor: '#fff',
+    height: 60,
   },
-  icon: {marginRight: 5},
+  icon: {
+    marginRight: 5,
+    marginLeft: 10,
+  },
+  header: {
+    flex: 1,
+    height: 200,
+  },
   title: {
+    resizeMode: 'contain',
+    height: 100,
+    width: 300,
     marginStart: 30,
     textAlign: 'left',
-    fontSize: 50,
-    fontWeight: '800',
-    color: '#1d1d1d',
   },
   subtitle: {
     marginStart: 30,
@@ -198,6 +199,7 @@ const styles = StyleSheet.create({
   },
   register: {
     marginTop: 20,
+    marginBottom: 30,
   },
   buttonicon: {
     marginRight: 10,
