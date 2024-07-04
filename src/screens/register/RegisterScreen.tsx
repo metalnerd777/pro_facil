@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Alert,
   TouchableOpacity,
+  Image,
+  ImageBackground,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -31,12 +33,15 @@ const RegisterScreen: React.FC = () => {
   };
 
   return (
-    <LinearGradient
-      style={styles.container}
-      colors={['#7b1fa2', '#64ffda']}
-      start={{x: 0, y: 1}}
-      end={{x: 1, y: 0}}>
-      <Text style={styles.title}>PROFÁCIL</Text>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require('../../assets/top-back.png')}
+        style={styles.header}
+      />
+      <Image
+        source={require('../../assets/logos/logo-pink.png')}
+        style={styles.title}
+      />
       <Text style={styles.subtitle}>
         Ingrese los siguientes datos para su registro
       </Text>
@@ -113,7 +118,7 @@ const RegisterScreen: React.FC = () => {
           />
         </View>
         <LinearGradient
-          colors={['#ff0000', '#9f00b4']}
+          colors={['#ff004f', '#9f00b4']}
           start={{x: 0, y: 1}}
           end={{x: 1, y: 0}}
           style={styles.button}>
@@ -129,7 +134,7 @@ const RegisterScreen: React.FC = () => {
         </LinearGradient>
 
         <LinearGradient
-          colors={['#ff0000', '#9f00b4']}
+          colors={['#ff004f', '#9f00b4']}
           start={{x: 0, y: 1}}
           end={{x: 1, y: 0}}
           style={styles.button}>
@@ -145,14 +150,18 @@ const RegisterScreen: React.FC = () => {
         </LinearGradient>
         <Text style={styles.register}>¿Ya registrado? Inicie sesión aquí</Text>
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     flex: 1,
-    backgroundColor: '#f3f3f3',
+    backgroundColor: '#ffffff',
+  },
+  header: {
+    flex: 1,
+    height: 200,
   },
   ticontainer: {
     marginBottom: 20,
@@ -167,11 +176,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
+    resizeMode: 'contain',
+    height: 100,
+    width: 300,
     marginStart: 30,
     textAlign: 'left',
-    fontSize: 50,
-    fontWeight: '800',
-    color: '#1d1d1d',
   },
   subtitle: {
     marginStart: 30,
@@ -217,6 +226,7 @@ const styles = StyleSheet.create({
   },
   register: {
     marginTop: 20,
+    marginBottom: 30,
   },
   icon: {
     marginRight: 5,
