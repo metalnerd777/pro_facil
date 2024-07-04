@@ -41,17 +41,17 @@ const SearchBar: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    borderWidth: 0,
     backgroundColor: '#f3f3f3',
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#ccc',
-    borderTopLeftRadius: 20,
+    borderTopLeftRadius: 30,
     borderTopRightRadius: 0,
-    borderBottomLeftRadius: 20,
+    borderBottomLeftRadius: 30,
     borderBottomRightRadius: 0,
-
     height: 60,
-    width: 360,
+    width: 345,
   },
   icon: {marginRight: 5, marginLeft: 10},
   text: {
@@ -62,18 +62,21 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderRadius: 25,
     marginBottom: 15,
-    width: 350,
+    width: 300,
     height: 60,
   },
   button: {
+    fontSize: 16,
+    height: 61,
     marginLeft: 0,
+    marginRight: 5,
     backgroundColor: '#ff004f',
     padding: 20,
     color: '#fff',
     borderTopLeftRadius: 0,
-    borderTopRightRadius: 20,
+    borderTopRightRadius: 30,
     borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 20,
+    borderBottomRightRadius: 30,
   },
 });
 
