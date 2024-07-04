@@ -17,7 +17,7 @@ export default function Map() {
       </View>
       <MapView
         style={styles.map}
-        styleURL="mapbox://styles/mapbox/navigation-night-v1">
+        styleURL="mapbox://styles/juanparra1988/cly7qytvh00ub01qo861yhbew">
         <Camera followUserLocation followZoomLevel={16} />
         <LocationPuck
           puckBearingEnabled={true}
