@@ -1,7 +1,8 @@
 import Mapbox, {Camera, LocationPuck, MapView} from '@rnmapbox/maps';
 import Geolocation from '@react-native-community/geolocation';
+import SearchBar from './SearchBar';
+import {View, StyleSheet} from 'react-native';
 
-//public token
 const accessToken =
   'pk.eyJ1IjoianVhbnBhcnJhMTk4OCIsImEiOiJjbHhkeml4Z2owYmRzMm1wdDdxaW1yYXp6In0.oy9iRkyNdufQYpX4X8B6Xg';
 Mapbox.setAccessToken(accessToken);
@@ -10,15 +11,34 @@ Geolocation.getCurrentPosition(info => console.log(info));
 
 export default function Map() {
   return (
-    <MapView
-      style={{flex: 1}}
-      styleURL="mapbox://styles/mapbox/navigation-night-v1">
-      <Camera followUserLocation followZoomLevel={16} />
-      <LocationPuck
-        puckBearingEnabled={true}
-        puckBearing="heading"
-        pulsing={{isEnabled: true}}
-      />
-    </MapView>
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <SearchBar />
+      </View>
+      <MapView
+        style={styles.map}
+        styleURL="mapbox://styles/mapbox/navigation-night-v1">
+        <Camera followUserLocation followZoomLevel={16} />
+        <LocationPuck
+          puckBearingEnabled={true}
+          puckBearing="heading"
+          pulsing={{isEnabled: true}}
+        />
+      </MapView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {flex: 1},
+  searchContainer: {
+    position: 'absolute',
+    top: 15,
+    left: 5,
+    right: 0,
+    zIndex: 1,
+  },
+});
