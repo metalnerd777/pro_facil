@@ -13,7 +13,10 @@ import {
 } from 'react-native';
 import supabase from '../../lib/supabase';
 
+import {useAuth} from '../../components/AuthContext';
+
 import LinearGradient from 'react-native-linear-gradient';
+//icons
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
@@ -32,16 +35,17 @@ const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const {signIn} = useAuth();
 
-  async function signInWithEmail() {
-    setLoading(true);
-    const {error} = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-    if (error) Alert.alert(error.message);
-    setLoading(false);
-  }
+  const handleLogin = async () => {
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -98,9 +102,7 @@ const LoginScreen: React.FC = () => {
             size={25}
             color="#fff"
           />
-          <TouchableOpacity
-            disabled={loading}
-            onPress={() => signInWithEmail()}>
+          <TouchableOpacity disabled={loading} onPress={handleLogin}>
             <Text style={styles.buttonText}>Ingresar</Text>
           </TouchableOpacity>
         </LinearGradient>
@@ -115,7 +117,7 @@ const LoginScreen: React.FC = () => {
             size={25}
             color="#fff"
           />
-          <TouchableOpacity onPress={() => signInWithEmail()}>
+          <TouchableOpacity onPress={() => handleLogin()}>
             <Text style={styles.buttonText}>Ingresar con Google</Text>
           </TouchableOpacity>
         </LinearGradient>

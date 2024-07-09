@@ -6,44 +6,51 @@ import React, {
   ReactNode,
 } from 'react';
 import supabase from '../lib/supabase';
-import {User} from '@supabase/supabase-js';
+import {Session} from '@supabase/supabase-js';
 
-interface AuthContextType {
-  user: User | null;
-}
+type AuthContextType = {
+  user: Session | null;
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({children}: {children: ReactNode}) => {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const {data, error} = await supabase.auth.getSession();
-      if (error) {
-        console.error('Error fetching session:', error);
-        return;
-      }
-      setUser(data?.session?.user ?? null);
-    };
-
-    fetchUser();
-
-    const {data: authListener} = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null);
-      },
-    );
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
-
-  return <AuthContext.Provider value={{user}}>{children}</AuthContext.Provider>;
+type AuthProviderProps = {
+  children: ReactNode;
 };
 
-export const useAuth = (): AuthContextType => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+  const [user, setUser] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({data: {session}}) => {
+      setUser(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session);
+    });
+  }, []);
+
+  const signIn = async (email: string, password: string) => {
+    const {error} = await supabase.auth.signInWithPassword({email, password});
+    if (error) throw error;
+  };
+
+  const signOut = async () => {
+    const {error} = await supabase.auth.signOut();
+    if (error) throw error;
+  };
+
+  return (
+    <AuthContext.Provider value={{user, signIn, signOut}}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');

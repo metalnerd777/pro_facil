@@ -13,11 +13,13 @@ import {AuthProvider, useAuth} from './src/components/AuthContext';
 
 const Stack = createNativeStackNavigator();
 
-function App(): React.JSX.Element {
+const Navigation: React.FC = () => {
+  const {user} = useAuth();
+
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Forgot"
+        initialRouteName="Login"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Forgot" component={ForgotPass} />
@@ -26,6 +28,14 @@ function App(): React.JSX.Element {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <Navigation />
+    </AuthProvider>
+  );
+};
 
 export default App;
