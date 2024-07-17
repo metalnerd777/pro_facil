@@ -1,19 +1,16 @@
 import React, {useState} from 'react';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {
   View,
   Text,
   TextInput,
-  AppState,
   StyleSheet,
-  Alert,
   TouchableOpacity,
   Image,
   ImageBackground,
 } from 'react-native';
 import supabase from '../../lib/supabase';
-
-import {useAuth} from '../../components/AuthContext';
 
 import LinearGradient from 'react-native-linear-gradient';
 //icons
@@ -21,30 +18,31 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import RegisterScreen from '../register/RegisterScreen';
+import {useNavigation} from '@react-navigation/native';
 library.add(fas, fab);
 
-AppState.addEventListener('change', state => {
-  if (state === 'active') {
-    supabase.auth.startAutoRefresh();
-  } else {
-    supabase.auth.stopAutoRefresh();
-  }
-});
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Home: undefined;
+};
+type LoginScreenProps = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen: React.FC = () => {
+  const navigation = useNavigation<LoginScreenProps>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const {signIn} = useAuth();
+  const [error, setError] = useState('');
 
-  const handleLogin = async () => {
-    try {
-      await signIn(email, password);
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-    }
-  };
+  async function handleLogin() {
+    setLoading(true);
+    setError('');
+    const {error} = await supabase.auth.signInWithPassword({email, password});
+    if (error) setError(error.message);
+    setLoading(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -121,7 +119,13 @@ const LoginScreen: React.FC = () => {
             <Text style={styles.buttonText}>Ingresar con Google</Text>
           </TouchableOpacity>
         </LinearGradient>
-        <Text style={styles.register}>¿No tienes cuenta? Registrate aquí</Text>
+        <TouchableOpacity
+          style={styles.register}
+          onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.registerText}>
+            ¿No tienes cuenta? Registrate aquí"
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -200,6 +204,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   register: {
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  registerText: {
     marginTop: 20,
     marginBottom: 30,
   },

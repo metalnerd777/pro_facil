@@ -1,4 +1,8 @@
 import React, {useState} from 'react';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import supabase from '../../lib/supabase';
+import {useNavigation} from '@react-navigation/native';
+
 import {
   View,
   Text,
@@ -17,7 +21,19 @@ import {fab} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 library.add(fas, fab);
 
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Home: undefined;
+};
+
+type RegisterScreenProps = NativeStackNavigationProp<
+  RootStackParamList,
+  'Register'
+>;
+
 const RegisterScreen: React.FC = () => {
+  const navigation = useNavigation<RegisterScreenProps>();
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
@@ -148,7 +164,14 @@ const RegisterScreen: React.FC = () => {
             <Text style={styles.buttonText}>Ingresar con Google</Text>
           </TouchableOpacity>
         </LinearGradient>
-        <Text style={styles.register}>¿Ya registrado? Inicie sesión aquí</Text>
+
+        <TouchableOpacity
+          style={styles.register}
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.register}>
+            ¿Ya registrado? Inicie sesión aquí
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
