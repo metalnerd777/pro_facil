@@ -40,11 +40,30 @@ const RegisterScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    if (email === '1' && password === '1') {
-      Alert.alert('Login Successful');
-    } else {
-      Alert.alert('Datos Incorrectos');
+  const handleRegister = async () => {
+    try {
+      const {data, error} = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+            lastName,
+            phone,
+          },
+        },
+      });
+      if (error) throw error;
+
+      if (data) {
+        Alert.alert('Éxito', 'Usuario registrado correctamente');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert('Error', error.message);
+      } else {
+        Alert.alert('Error', 'Ha ocurrido un error desconocido');
+      }
     }
   };
 
@@ -144,7 +163,7 @@ const RegisterScreen: React.FC = () => {
             size={25}
             color="#fff"
           />
-          <TouchableOpacity onPress={handleLogin}>
+          <TouchableOpacity onPress={handleRegister}>
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
         </LinearGradient>
@@ -160,7 +179,7 @@ const RegisterScreen: React.FC = () => {
             size={25}
             color="#fff"
           />
-          <TouchableOpacity onPress={handleLogin}>
+          <TouchableOpacity onPress={handleRegister}>
             <Text style={styles.buttonText}>Ingresar con Google</Text>
           </TouchableOpacity>
         </LinearGradient>
