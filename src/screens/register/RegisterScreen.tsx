@@ -42,21 +42,33 @@ const RegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      const {data, error} = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            name,
-            lastName,
-            phone,
+      const {data: signUpData, error: signUpError} = await supabase.auth.signUp(
+        {
+          email,
+          password,
+          options: {
+            data: {
+              name,
+              lastName,
+              phone,
+            },
           },
         },
-      });
-      if (error) throw error;
+      );
+      if (signUpError) throw signUpError;
 
-      if (data) {
+      if (signUpData.user) {
         Alert.alert('Éxito', 'Usuario registrado correctamente');
+        const {data: signInData, error: signInError} =
+          await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+        if (signInError) throw signInError;
+        if (signInData.session) {
+          Alert.alert('Usuario registrado y sesión iniciada!');
+          navigation.navigate('Home');
+        }
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -150,6 +162,7 @@ const RegisterScreen: React.FC = () => {
             placeholder="Contraseña"
             value={password}
             onChangeText={setPassword}
+            secureTextEntry={true}
           />
         </View>
         <LinearGradient

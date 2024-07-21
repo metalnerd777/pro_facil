@@ -3,6 +3,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {
   View,
+  Alert,
   Text,
   TextInput,
   StyleSheet,
@@ -39,8 +40,14 @@ const LoginScreen: React.FC = () => {
   async function handleLogin() {
     setLoading(true);
     setError('');
-    const {error} = await supabase.auth.signInWithPassword({email, password});
-    if (error) setError(error.message);
+    const {data: signInData, error: signInError} =
+      await supabase.auth.signInWithPassword({email, password});
+
+    if (signInError) setError(signInError.message);
+    if (signInData.session) {
+      Alert.alert('Sesión iniciada!');
+      navigation.navigate('Home');
+    }
     setLoading(false);
   }
 
