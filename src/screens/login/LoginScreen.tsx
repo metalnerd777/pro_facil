@@ -130,7 +130,7 @@ const LoginScreen: React.FC = () => {
           style={styles.register}
           onPress={() => navigation.navigate('Register')}>
           <Text style={styles.registerText}>
-            ¿No tienes cuenta? Registrate aquí"
+            ¿No tienes cuenta? Registrate aquí!
           </Text>
         </TouchableOpacity>
       </View>

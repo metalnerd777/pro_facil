@@ -32,13 +32,20 @@ type RegisterScreenProps = NativeStackNavigationProp<
   'Register'
 >;
 
+type UserType = 'cliente' | 'prestador';
+
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterScreenProps>();
-  const [name, setName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [user_type, setUserType] = useState<UserType>('cliente');
+
+  const handleUserType = (type: UserType) => {
+    setUserType(type);
+  };
 
   const handleRegister = async () => {
     try {
@@ -48,9 +55,10 @@ const RegisterScreen: React.FC = () => {
           password,
           options: {
             data: {
-              name,
-              lastName,
+              first_name,
+              last_name,
               phone,
+              user_type,
             },
           },
         },
@@ -59,6 +67,11 @@ const RegisterScreen: React.FC = () => {
 
       if (signUpData.user) {
         Alert.alert('Éxito', 'Usuario registrado correctamente');
+        const {error: updateError} = await supabase
+          .from('users')
+          .update({first_name, last_name, phone, user_type})
+          .eq('id', signUpData.user.id);
+
         const {data: signInData, error: signInError} =
           await supabase.auth.signInWithPassword({
             email,
@@ -103,8 +116,8 @@ const RegisterScreen: React.FC = () => {
           <TextInput
             style={styles.input}
             placeholder="Nombre(s)"
-            value={name}
-            onChangeText={setName}
+            value={first_name}
+            onChangeText={setFirstName}
           />
         </View>
 
@@ -118,7 +131,7 @@ const RegisterScreen: React.FC = () => {
           <TextInput
             style={styles.input}
             placeholder="Apellido(s)"
-            value={lastName}
+            value={last_name}
             onChangeText={setLastName}
           />
         </View>
@@ -165,6 +178,40 @@ const RegisterScreen: React.FC = () => {
             secureTextEntry={true}
           />
         </View>
+        <Text style={{fontSize: 15, marginBottom: 10}}>
+          Selecciona tu tipo de usuario!
+        </Text>
+        <View style={styles.tipoUsuario}>
+          <TouchableOpacity
+            style={[
+              styles.buttontype,
+              user_type === 'cliente' && styles.selectedButton,
+            ]}
+            onPress={() => handleUserType('cliente')}>
+            <Text
+              style={[
+                styles.buttonTypeText,
+                user_type === 'cliente' && styles.selectedButtonText,
+              ]}>
+              Cliente
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.buttontype,
+              user_type === 'prestador' && styles.selectedButton,
+            ]}
+            onPress={() => handleUserType('prestador')}>
+            <Text
+              style={[
+                styles.buttonTypeText,
+                user_type === 'prestador' && styles.selectedButtonText,
+              ]}>
+              Prestador
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <LinearGradient
           colors={['#ff004f', '#9f00b4']}
           start={{x: 0, y: 1}}
@@ -217,6 +264,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     height: 200,
+    opacity: 0.15,
   },
   ticontainer: {
     marginBottom: 20,
@@ -233,7 +281,7 @@ const styles = StyleSheet.create({
   title: {
     resizeMode: 'contain',
     height: 100,
-    width: 300,
+    width: 200,
     marginStart: 30,
     textAlign: 'left',
   },
@@ -280,8 +328,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   register: {
-    marginTop: 20,
-    marginBottom: 30,
+    marginTop: 15,
+    marginBottom: 20,
   },
   icon: {
     marginRight: 5,
@@ -289,6 +337,31 @@ const styles = StyleSheet.create({
   buttonicon: {
     marginRight: 10,
     marginTop: 2,
+  },
+  tipoUsuario: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  buttontype: {
+    borderRadius: 30,
+    backgroundColor: 'lightgray',
+    color: '#000',
+    width: 150,
+    height: 45,
+    marginBottom: 20,
+    padding: 8,
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  selectedButton: {
+    backgroundColor: '#ff004f',
+  },
+  buttonTypeText: {
+    fontSize: 20,
+    color: '#5e5e5e',
+  },
+  selectedButtonText: {
+    color: '#fff',
   },
 });
 export default RegisterScreen;
