@@ -49,43 +49,43 @@ const RegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      const {data: signUpData, error: signUpError} = await supabase.auth.signUp(
-        {
-          email,
-          password,
-          options: {
-            data: {
-              first_name,
-              last_name,
-              phone,
-              user_type,
-            },
-          },
-        },
-      );
+      console.log('Iniciando registro de usuario');
+
+      const {data, error: signUpError} = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      console.log('usuario creado');
+
       if (signUpError) throw signUpError;
 
-      if (signUpData.user) {
-        Alert.alert('Éxito', 'Usuario registrado correctamente');
-        const {error: updateError} = await supabase
-          .from('users')
-          .update({first_name, last_name, phone, user_type})
-          .eq('id', signUpData.user.id);
+      console.log('Usuario registrado en auth:', data.user);
 
-        const {data: signInData, error: signInError} =
-          await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
-        if (signInError) throw signInError;
-        if (signInData.session) {
-          Alert.alert('Usuario registrado y sesión iniciada!');
-          navigation.navigate('Home');
+      if (data.user) {
+        console.log('Intentando insertar datos adicionales');
+        const {error: insertError} = await supabase.from('users').insert({
+          id: data.user.id,
+          first_name: first_name || '',
+          last_name: last_name || '',
+          phone: phone || '',
+          user_type: user_type || 'cliente',
+        });
+
+        if (insertError) {
+          console.error('Error al insertar datos adicionales:', insertError);
+          console.error(
+            'Detalles del error:',
+            JSON.stringify(insertError, null, 2),
+          );
+          throw insertError;
         }
+
+        console.log('Datos adicionales insertados:', insertData);
       }
     } catch (error) {
+      console.error('Error en el proceso de registro:', error);
       if (error instanceof Error) {
-        Alert.alert('Error', error.message);
+        Alert.alert('Error', `${error.name}: ${error.message}`);
       } else {
         Alert.alert('Error', 'Ha ocurrido un error desconocido');
       }
