@@ -80,7 +80,7 @@ const RegisterScreen: React.FC = () => {
           throw insertError;
         }
 
-        console.log('Datos adicionales insertados:', insertData);
+        console.log('Datos adicionales insertados');
       }
     } catch (error) {
       console.error('Error en el proceso de registro:', error);
