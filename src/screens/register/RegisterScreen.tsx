@@ -50,48 +50,39 @@ const RegisterScreen: React.FC = () => {
   const handleRegister = async () => {
     try {
       console.log('Iniciando registro de usuario');
-
-      const {data, error: signUpError} = await supabase.auth.signUp({
+      const {data: authData, error: authError} = await supabase.auth.signUp({
         email,
         password,
       });
-      console.log('usuario creado');
+      if (authError) {
+        throw authError;
+        console.log('Error al crear el usuario');
+      }
+      if (authData.user) {
+        console.log('insertar datos adicionales');
+        console.log('DATA USER: ', authData.user);
 
-      if (signUpError) throw signUpError;
-
-      console.log('Usuario registrado en auth:', data.user);
-
-      if (data.user) {
-        console.log('Intentando insertar datos adicionales');
-        const {error: insertError} = await supabase.from('users').insert({
-          id: data.user.id,
-          first_name: first_name || '',
-          last_name: last_name || '',
-          phone: phone || '',
-          user_type: user_type || 'cliente',
-        });
-
-        if (insertError) {
-          console.error('Error al insertar datos adicionales:', insertError);
-          console.error(
-            'Detalles del error:',
-            JSON.stringify(insertError, null, 2),
-          );
-          throw insertError;
+        const {error: userProfileError} = await supabase
+          .from('user_profile')
+          .insert({
+            user_id: authData.user.id,
+            first_name: first_name,
+            last_name,
+            phone,
+            user_type,
+          });
+        if (userProfileError) {
+          console.log('Error al agregar los datos de usuario adicionales');
+          throw userProfileError;
         }
-
-        console.log('Datos adicionales insertados');
+        Alert.alert('Usuario registrado correctamente');
+        //redirección
+        navigation.navigate('Home');
       }
     } catch (error) {
-      console.error('Error en el proceso de registro:', error);
-      if (error instanceof Error) {
-        Alert.alert('Error', `${error.name}: ${error.message}`);
-      } else {
-        Alert.alert('Error', 'Ha ocurrido un error desconocido');
-      }
+      Alert.alert('Error', `Registro fallido`);
     }
   };
-
   return (
     <View style={styles.container}>
       <ImageBackground
