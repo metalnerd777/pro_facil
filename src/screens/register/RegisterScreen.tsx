@@ -51,8 +51,7 @@ const RegisterScreen: React.FC = () => {
   const handleRegister = async () => {
     try {
       console.log('Iniciando registro de usuario');
-
-      const {data, error: signUpError} = await supabase.auth.signUp({
+      const {data: authData, error: authError} = await supabase.auth.signUp({
         email,
         password,
       });
@@ -87,15 +86,9 @@ const RegisterScreen: React.FC = () => {
         console.log('Datos adicionales insertados');
       }
     } catch (error) {
-      console.error('Error en el proceso de registro:', error);
-      if (error instanceof Error) {
-        Alert.alert('Error', `${error.name}: ${error.message}`);
-      } else {
-        Alert.alert('Error', 'Ha ocurrido un error desconocido');
-      }
+      Alert.alert('Error', `Registro fallido`);
     }
   };
-
   return (
     <View style={styles.container}>
       <ImageBackground
