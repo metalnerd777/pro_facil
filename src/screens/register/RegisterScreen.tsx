@@ -32,16 +32,17 @@ type RegisterScreenProps = NativeStackNavigationProp<
   'Register'
 >;
 
-type UserType = 'cliente' | 'prestador';
+type UserType = 'client' | 'provider';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterScreenProps>();
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
+  const [countryCode, setCountryCode] = useState(56);
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user_type, setUserType] = useState<UserType>('cliente');
+  const [user_type, setUserType] = useState<UserType>('client');
 
   const handleUserType = (type: UserType) => {
     setUserType(type);
@@ -63,13 +64,16 @@ const RegisterScreen: React.FC = () => {
 
       if (data.user) {
         console.log('Intentando insertar datos adicionales');
-        const {error: insertError} = await supabase.from('users').insert({
-          id: data.user.id,
-          first_name: first_name || '',
-          last_name: last_name || '',
-          phone: phone || '',
-          user_type: user_type || 'cliente',
-        });
+        const {error: insertError} = await supabase
+          .from('user_profiles')
+          .insert({
+            id: data.user.id,
+            first_name: first_name || '',
+            last_name: last_name || '',
+            country_code: 56,
+            phone: phone || '',
+            user_type: user_type || 'client',
+          });
 
         if (insertError) {
           console.error('Error al insertar datos adicionales:', insertError);
@@ -118,6 +122,7 @@ const RegisterScreen: React.FC = () => {
             placeholder="Nombre(s)"
             value={first_name}
             onChangeText={setFirstName}
+            maxLength={100}
           />
         </View>
 
@@ -133,6 +138,7 @@ const RegisterScreen: React.FC = () => {
             placeholder="Apellido(s)"
             value={last_name}
             onChangeText={setLastName}
+            maxLength={100}
           />
         </View>
         <View style={styles.ticontainer}>
@@ -144,9 +150,11 @@ const RegisterScreen: React.FC = () => {
           />
           <TextInput
             style={styles.input}
-            placeholder="Teléfono"
+            placeholder="Teléfono (9 xxxxxxxx)"
+            maxLength={9}
             value={phone}
             onChangeText={setPhone}
+            keyboardType="phone-pad"
           />
         </View>
         <View style={styles.ticontainer}>
@@ -161,6 +169,8 @@ const RegisterScreen: React.FC = () => {
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
+            maxLength={100}
+            keyboardType="email-address"
           />
         </View>
         <View style={styles.ticontainer}>
@@ -176,6 +186,7 @@ const RegisterScreen: React.FC = () => {
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
+            maxLength={100}
           />
         </View>
         <Text style={{fontSize: 15, marginBottom: 10}}>
@@ -185,13 +196,13 @@ const RegisterScreen: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.buttontype,
-              user_type === 'cliente' && styles.selectedButton,
+              user_type === 'client' && styles.selectedButton,
             ]}
-            onPress={() => handleUserType('cliente')}>
+            onPress={() => handleUserType('client')}>
             <Text
               style={[
                 styles.buttonTypeText,
-                user_type === 'cliente' && styles.selectedButtonText,
+                user_type === 'client' && styles.selectedButtonText,
               ]}>
               Cliente
             </Text>
@@ -199,13 +210,13 @@ const RegisterScreen: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.buttontype,
-              user_type === 'prestador' && styles.selectedButton,
+              user_type === 'provider' && styles.selectedButton,
             ]}
-            onPress={() => handleUserType('prestador')}>
+            onPress={() => handleUserType('provider')}>
             <Text
               style={[
                 styles.buttonTypeText,
-                user_type === 'prestador' && styles.selectedButtonText,
+                user_type === 'provider' && styles.selectedButtonText,
               ]}>
               Prestador
             </Text>
