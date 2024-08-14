@@ -38,7 +38,6 @@ const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterScreenProps>();
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
-  const [countryCode, setCountryCode] = useState(56);
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,7 +50,8 @@ const RegisterScreen: React.FC = () => {
   const handleRegister = async () => {
     try {
       console.log('Iniciando registro de usuario');
-      const {data: authData, error: authError} = await supabase.auth.signUp({
+
+      const {data, error: signUpError} = await supabase.auth.signUp({
         email,
         password,
       });
@@ -84,9 +84,21 @@ const RegisterScreen: React.FC = () => {
         }
 
         console.log('Datos adicionales insertados');
+        const {error: signInError} = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (signInError) throw signInError;
+        console.log('Sesión iniciada');
+        navigation.navigate('Home');
       }
     } catch (error) {
-      Alert.alert('Error', `Registro fallido`);
+      console.error('Error en el proceso de registro:', error);
+      if (error instanceof Error) {
+        Alert.alert('Error', `${error.name}: ${error.message}`);
+      } else {
+        Alert.alert('Error', 'Ha ocurrido un error desconocido');
+      }
     }
   };
   return (

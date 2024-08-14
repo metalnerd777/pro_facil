@@ -19,7 +19,6 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import RegisterScreen from '../register/RegisterScreen';
 import {useNavigation} from '@react-navigation/native';
 library.add(fas, fab);
 
