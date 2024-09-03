@@ -76,6 +76,7 @@ const LoginScreen: React.FC = () => {
             placeholder="Dirección de correo"
             value={email}
             onChangeText={setEmail}
+            keyboardType="email-address"
           />
         </View>
         <View style={styles.ticontainer}>

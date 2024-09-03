@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //vistas y componentes
 import Map from './src/components/Map';
+import UserButton from './src/components/UserButton';
 import LoginScreen from './src/screens/login/LoginScreen';
 import RegisterScreen from './src/screens/register/RegisterScreen';
 import ForgotPass from './src/screens/login/ForgotPass';
@@ -25,6 +26,7 @@ const Navigation: React.FC = () => {
         <Stack.Screen name="Forgot" component={ForgotPass} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Home" component={Map} />
+        <Stack.Screen name="ProfileButton" component={UserButton} />
       </Stack.Navigator>
     </NavigationContainer>
   );
