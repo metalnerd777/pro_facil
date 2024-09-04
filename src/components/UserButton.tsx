@@ -9,11 +9,11 @@ library.add(fas);
 
 type RootStackParamList = {
   Home: undefined;
-  Profile: undefined;
+  ProfileScreen: undefined;
 };
 type NavigationButtonProps = NativeStackNavigationProp<
   RootStackParamList,
-  'Profile'
+  'ProfileScreen'
 >;
 
 const UserButton: React.FC = () => {
@@ -21,17 +21,12 @@ const UserButton: React.FC = () => {
 
   const handleSubmit = async () => {
     console.log('redirigiendo a perfil');
-    navigation.navigate('Profile');
+    navigation.navigate('ProfileScreen');
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleSubmit}>
-        <FontAwesomeIcon
-          style={styles.icon}
-          icon={['fas', 'user']}
-          size={30}
-          color="#000"
-        />
+      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+        <FontAwesomeIcon icon={['fas', 'user']} style={styles.icon} />
       </TouchableOpacity>
     </View>
   );
@@ -39,13 +34,21 @@ const UserButton: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     position: 'absolute',
+    right: 20,
+    top: 860,
     zIndex: 1,
   },
   icon: {
-    position: 'absolute',
-    margin: 200,
+    color: '#fff',
+    fontSize: 50,
+    padding: 10,
+  },
+  button: {
+    backgroundColor: '#ff004f',
+    borderRadius: 30,
+    padding: 10,
+    elevation: 5,
   },
 });
 

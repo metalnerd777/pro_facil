@@ -44,7 +44,7 @@ const LoginScreen: React.FC = () => {
 
     if (signInError) setError(signInError.message);
     if (signInData.session) {
-      Alert.alert('Sesión iniciada!');
+      console.log('Sesión iniciada');
       navigation.navigate('Home');
     }
     setLoading(false);
@@ -77,6 +77,7 @@ const LoginScreen: React.FC = () => {
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.ticontainer}>
