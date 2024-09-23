@@ -1,14 +1,19 @@
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import React, {Component} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
-export class ProfileScreen extends Component {
-  render() {
-    return (
-      <View>
-        <Text>ProfileSASacreen</Text>
-      </View>
-    );
-  }
-}
+type UserType = 'client' | 'provider';
+
+const ProfileScreen: React.FC = () => {
+  return (
+    <View>
+      <Text>ProfileSASacreen</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {},
+});
 
 export default ProfileScreen;
